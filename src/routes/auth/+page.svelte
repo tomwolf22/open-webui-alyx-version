@@ -156,7 +156,7 @@
 	onMount(async () => {
 		const redirectPath = $page.url.searchParams.get('redirect');
 		if ($user) {
-			goto(redirectPath || '/auth'); //Auth instead of root to stop flickering
+			goto(redirectPath || '/'); //Auth instead of root to stop flickering
 		} else {
 			if (redirectPath) {
 				localStorage.setItem('redirectPath', redirectPath);
