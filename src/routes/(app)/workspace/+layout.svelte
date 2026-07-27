@@ -32,10 +32,7 @@
 
 	$: if ($page.url.pathname !== lastPath) {
 		lastPath = $page.url.pathname;
-		workspaceActions.set([
-    { id: 'skills', label: 'Skills', href: '/workspace/skills', visible: true },
-    { id: 'tools', label: 'Tools', href: '/workspace/tools', visible: true }
-]);
+		workspaceActions.set([]);
 	}
 
 	$: if (loaded && $page.url.pathname.startsWith('/workspace')) {
