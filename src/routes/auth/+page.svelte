@@ -156,7 +156,7 @@
 	onMount(async () => {
 		const redirectPath = $page.url.searchParams.get('redirect');
 		if ($user) {
-			goto(redirectPath || '/');
+			goto(redirectPath || '/auth');
 		} else {
 			if (redirectPath) {
 				localStorage.setItem('redirectPath', redirectPath);
