@@ -888,7 +888,7 @@ if LICENSE_PUBLIC_KEY:
 # WEBUI Identity
 ####################################
 
-WEBUI_NAME = os.getenv('WEBUI_NAME', 'Open WebUI')
+WEBUI_NAME = os.getenv('WEBUI_NAME', 'WebUI')
 
 WEBUI_FAVICON_URL = 'https://files.alyxai.net/44baef33-3145-4fd6-a525-3c15e0819d93_favicon.ico'
 WEBUI_BUILD_HASH = os.getenv('WEBUI_BUILD_HASH', 'dev-build')
