@@ -47,7 +47,3 @@
 		}
 	});
 </script>
-
-		</UserSettingSection>
-	</div>
-</div>
