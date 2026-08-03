@@ -1,39 +1,46 @@
-// API Functions
-const getVersionUpdates = (token: string) => { /* ... */ };
-const getOllamaVersion = (token: string) => { /* ... */ };
+<script lang="ts">
+import { getVersionUpdates } from '$lib/apis';
+import { getOllamaVersion } from '$lib/apis/ollama';
+import { WEBUI_BUILD_HASH, WEBUI_VERSION } from '$lib/constants';
+import { WEBUI_NAME, config, showChangelog } from '$lib/stores';
+import { compareVersion } from '$lib/utils';
+import { onMount, getContext } from 'svelte';
+import Tooltip from '$lib/components/common/Tooltip.svelte';
+import UserSettingRow from './UserSettingRow.svelte';
+import UserSettingSection from './UserSettingSection.svelte';
 
-// Constants
-const WEBUI_VERSION = "..."; // Your version string
-const WEBUI_BUILD_HASH = "..."; // Your build hash
-
-// State
-let ollamaVersion = "";
-let updateAvailable: boolean | null = null;
+const i18n = getContext('i18n');
+let ollamaVersion = '';
+let updateAvailable = null;
 let version = {
-  current: WEBUI_VERSION,
-  latest: ""
+  current: '',
+  latest: ''
 };
 
-// Utility
-const compareVersion = (latest: string, current: string) => {
-  // Implement version comparison logic
-  return latest !== current;
-};
+const actionButtonClass =
+  'text-xs text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-500 dark:hover:text-white';
 
-// Main Logic
 const checkForVersionUpdates = async () => {
   updateAvailable = null;
-  version = await getVersionUpdates(localStorage.token).catch(() => ({
-    current: WEBUI_VERSION,
-    latest: WEBUI_VERSION
-  }));
+  version = await getVersionUpdates(localStorage.token).catch((error) => {
+    return {
+      current: WEBUI_VERSION,
+      latest: WEBUI_VERSION
+    };
+  });
+  console.log(version);
   updateAvailable = compareVersion(version.latest, version.current);
+  console.log(updateAvailable);
 };
 
-// Initialization
-const initialize = async () => {
-  ollamaVersion = await getOllamaVersion(localStorage.token).catch(() => "");
-  if (config?.features?.enable_version_update_check) {
-    await checkForVersionUpdates();
+onMount(async () => {
+  ollamaVersion = await getOllamaVersion(localStorage.token).catch((error) => {
+    return '';
+  });
+  if ($config?.features?.enable_version_update_check) {
+    checkForVersionUpdates();
   }
-};
+});
+</script>
+
+<!-- HTML div, sections, and UI components removed -->
