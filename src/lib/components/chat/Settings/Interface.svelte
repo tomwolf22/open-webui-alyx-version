@@ -19,13 +19,13 @@
 
 	export let saveSettings: Function;
 
-	let backgroundImageUrl = null;
+	let backgroundImageUrl = 'https://files.alyxai.net/a6b70f97-f3ba-4728-a9bd-1d3349fc7d69_output.jpg';
 	let inputFiles = null;
 	let filesInputElement;
 
 	// Addons
 	let titleAutoGenerate = true;
-	let autoFollowUps = true;
+	let autoFollowUps = false;
 	let autoTags = true;
 
 	let responseAutoCopy = false;
@@ -40,14 +40,14 @@
 	let defaultModelId = '';
 	let showUsername = false;
 
-	let highContrastMode = false;
+	let highContrastMode = true;
 
 	let detectArtifacts = true;
 	let displayMultiModelResponsesInTabs = false;
 
 	let richTextInput = true;
 	let showFormattingToolbar = false;
-	let insertPromptAsRichText = false;
+	let insertPromptAsRichText = true;
 	let promptAutocomplete = false;
 
 	let largeTextAsFile = false;
@@ -77,7 +77,7 @@
 	let showFloatingActionButtons = true;
 	let floatingActionButtons = null;
 
-	let imageCompression = false;
+	let imageCompression = true;
 	let imageCompressionSize = {
 		width: '',
 		height: ''
@@ -100,8 +100,8 @@
 
 	let webSearch = null;
 
-	let iframeSandboxAllowSameOrigin = false;
-	let iframeSandboxAllowForms = false;
+	let iframeSandboxAllowSameOrigin = true;
+	let iframeSandboxAllowForms = true;
 
 	let showManageFloatingActionButtonsModal = false;
 	let showManageImageCompressionModal = false;
@@ -273,7 +273,7 @@
 		showFloatingActionButtons = $settings?.showFloatingActionButtons ?? true;
 		floatingActionButtons = $settings?.floatingActionButtons ?? null;
 
-		imageCompression = $settings?.imageCompression ?? false;
+		imageCompression = $settings?.imageCompression ?? true;
 		imageCompressionSize = $settings?.imageCompressionSize ?? { width: '', height: '' };
 		imageCompressionInChannels = $settings?.imageCompressionInChannels ?? true;
 
