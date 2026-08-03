@@ -19,7 +19,7 @@
 
 	export let saveSettings: Function;
 
-	let backgroundImageUrl = 'https://files.alyxai.net/a6b70f97-f3ba-4728-a9bd-1d3349fc7d69_output.jpg';
+	let backgroundImageUrl = 'https://files.alyxai.net/961a7dab-d415-4bea-9f40-aeaae3085805_output.jpg';
 	let inputFiles = null;
 	let filesInputElement;
 
