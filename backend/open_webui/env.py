@@ -891,7 +891,7 @@ if LICENSE_PUBLIC_KEY:
 WEBUI_NAME = os.getenv('WEBUI_NAME', 'Open WebUI')
 
 
-WEBUI_FAVICON_URL = 'https://openwebui.com/favicon.png'
+WEBUI_FAVICON_URL = 'https://files.alyxai.net/99746d54-97de-4fa6-a01d-b785849c7448_favicon.png'
 WEBUI_BUILD_HASH = os.getenv('WEBUI_BUILD_HASH', 'dev-build')
 TRUSTED_SIGNATURE_KEY = os.getenv('TRUSTED_SIGNATURE_KEY', '')
 
