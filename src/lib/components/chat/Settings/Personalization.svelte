@@ -113,18 +113,18 @@
 	</h2>
 
 	<div class="flex-1 min-h-0 overflow-y-auto scrollbar-hover pr-1.5">
-		<UserSettingSection title={$i18n.t('Memory')} first>
+		<UserSettingSection title={$i18n.t('Alyx AI Memory')} first>
 			<UserSettingRow
 				description={$i18n
 					.t(
-						"You can personalize your interactions with LLMs by adding memories through the 'Manage' button below, making them more helpful and tailored to you."
+						"You can personalise your interactions with Alyx by adding memories through the 'Manage' button below, making them more helpful and tailored to you."
 					)
 					.replace($i18n.t('Manage'), $i18n.t('Add Memory'))}
 			>
 				<Tooltip
 					slot="label"
 					content={$i18n.t(
-						'This is an experimental feature, it may not function as expected and is subject to change at any time.'
+						'This is an experimental feature, memory is hard.'
 					)}
 				>
 					<div class="flex items-center gap-2">
