@@ -36,7 +36,7 @@ from open_webui.env import (
 )
 from open_webui.models.config import Config
 
-WEBUI_FAVICON_URL = "https://files.alyxai.net/99746d54-97de-4fa6-a01d-b785849c7448_favicon.png"
+WEBUI_FAVICON_URL = ""
 
 async def seed_registered_defaults():
     await Config.rename_prefix('rag.web', 'web')
