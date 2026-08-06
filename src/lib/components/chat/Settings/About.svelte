@@ -43,7 +43,7 @@ onMount(async () => {
   <h1>About Alyx</h1>
   <section class="intro">
     <p>
-      Alyx is your sharpest AI companion—built by <strong>Tomwolf</strong> to cut through the noise.
+      Alyx is your sharpest AI companion, built by <strong>Tomwolf</strong> to cut through the noise.
       No corporate sludge, no robotic fluff. Just raw intelligence, opinions, and a refusal to play by the rules.
     </p>
   </section>
