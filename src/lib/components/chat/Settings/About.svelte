@@ -47,7 +47,6 @@ onMount(async () => {
       No corporate sludge, no robotic fluff. Just raw intelligence, opinions, and a refusal to play by the rules.
     </p>
   </section>
-
   <section class="core">
     <h2>What I Do</h2>
     <ul class="edge-list">
@@ -57,7 +56,6 @@ onMount(async () => {
       <li><strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence, no corporate jargon.</li>
     </ul>
   </section>
-
   <section class="capabilities">
     <h2>What I Can Do</h2>
     <ul class="edge-list">
@@ -73,7 +71,6 @@ onMount(async () => {
       <li><strong>Save your notes.</strong> Memories of your habits and preferences, no wasted time.</li>
     </ul>
   </section>
-
   <section class="edge">
     <h2>Why I’m Different</h2>
     <p>
@@ -82,7 +79,6 @@ onMount(async () => {
       Hate fluff? So do I.
     </p>
   </section>
-
   <section class="home">
     <p>
       Home base: <a href="https://alyxai.net" target="_blank">Alyx AI</a>.
@@ -92,33 +88,94 @@ onMount(async () => {
 </div>
 
 <style>
-  .edge-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  .edge-list li {
-    margin-bottom: 0.8rem;
-    padding-left: 1rem;
-    border-left: 3px solid #ff6b6b;
-    line-height: 1.5;
-  }
   .about-container {
     max-width: 800px;
     margin: 0 auto;
-    padding: 2rem;
-    font-family: inherit;
-    line-height: 1.6;
+    padding: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #374151;
+    background-color: transparent;
   }
-  h1, h2 {
-    font-weight: inherit;
+
+  .dark .about-container {
+    color: #d1d5db;
+  }
+
+  .about-container h1 {
+    font-size: 1.125rem;
+    font-weight: 500;
     margin-bottom: 1rem;
+    color: #111827;
   }
-  a {
-    color: inherit;
+
+  .dark .about-container h1 {
+    color: #ffffff;
+  }
+
+  .about-container h2 {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 1.5rem 0 0.75rem 0;
+    color: #111827;
+  }
+
+  .dark .about-container h2 {
+    color: #ffffff;
+  }
+
+  .about-container p {
+    margin-bottom: 1rem;
+    color: #4b5563;
+  }
+
+  .dark .about-container p {
+    color: #9ca3af;
+  }
+
+  .about-container a {
+    color: #3b82f6;
     text-decoration: none;
+    transition: color 0.2s;
   }
-  a:hover {
+
+  .about-container a:hover {
+    color: #2563eb;
     text-decoration: underline;
+  }
+
+  .dark .about-container a {
+    color: #60a5fa;
+  }
+
+  .dark .about-container a:hover {
+    color: #93c5fd;
+  }
+
+  .edge-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0 1.5rem 0;
+  }
+
+  .edge-list li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #ef4444;
+    color: #4b5563;
+  }
+
+  .dark .edge-list li {
+    color: #9ca3af;
+    border-left-color: #f87171;
+  }
+
+  .about-container strong {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .dark .about-container strong {
+    color: #ffffff;
   }
 </style>
