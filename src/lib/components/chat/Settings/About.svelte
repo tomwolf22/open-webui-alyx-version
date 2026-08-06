@@ -106,7 +106,6 @@ onMount(async () => {
     font-size: 1.125rem;
     font-weight: 500;
     margin-bottom: 1rem;
-    color: #111827;
   }
 
   .dark .about-container h1 {
@@ -117,7 +116,6 @@ onMount(async () => {
     font-size: 0.875rem;
     font-weight: 500;
     margin: 1.5rem 0 0.75rem 0;
-    color: #111827;
   }
 
   .dark .about-container h2 {
@@ -172,7 +170,6 @@ onMount(async () => {
 
   .about-container strong {
     font-weight: 600;
-    color: #111827;
   }
 
   .dark .about-container strong {
