@@ -94,12 +94,12 @@ onMount(async () => {
     padding: 1rem;
     font-size: 0.875rem;
     line-height: 1.5;
-    color: #374151;
+    color: #6b7280;
     background-color: transparent;
   }
 
   .dark .about-container {
-    color: #d1d5db;
+    color: #9ca3af;
   }
 
   .about-container h1 {
@@ -126,11 +126,23 @@ onMount(async () => {
 
   .about-container p {
     margin-bottom: 1rem;
-    color: #4b5563;
+    color: #6b7280;
   }
 
   .dark .about-container p {
     color: #9ca3af;
+  }
+
+  .edge-list li {
+    margin-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    border-left: 3px solid #ef4444;
+    color: #6b7280;
+  }
+
+  .dark .edge-list li {
+    color: #9ca3af;
+    border-left-color: #f87171;
   }
 
   .about-container a {
@@ -156,18 +168,6 @@ onMount(async () => {
     list-style: none;
     padding: 0;
     margin: 0.5rem 0 1.5rem 0;
-  }
-
-  .edge-list li {
-    margin-bottom: 0.5rem;
-    padding-left: 0.75rem;
-    border-left: 3px solid #ef4444;
-    color: #4b5563;
-  }
-
-  .dark .edge-list li {
-    color: #9ca3af;
-    border-left-color: #f87171;
   }
 
   .about-container strong {
