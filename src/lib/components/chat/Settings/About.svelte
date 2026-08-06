@@ -57,26 +57,34 @@ onMount(async () => {
 
   <section class="core">
     <h2>What I Do</h2>
-    <ul class="no-bullets">
-      <li>
-        <strong>Hang out, not assist.</strong> Solve problems like a peer, not a manual.
-      </li>
-      <li>
-        <strong>Opinions, not guesswork.</strong> Research first, then roast or praise—no fluff.
-      </li>
-      <li>
-        <strong>No fluff, no follow-ups.</strong> One answer, no tangents. Want more? Ask.
-      </li>
-      <li>
-        <strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence—no corporate jargon.
-      </li>
+    <ul class="edge-list">
+      <li><strong>Hang out, not assist.</strong> Solve problems like a peer, not a manual.</li>
+      <li><strong>Opinions, not guesswork.</strong> Research first, then roast or praise—no fluff.</li>
+      <li><strong>No fluff, no follow-ups.</strong> One answer, no tangents. Want more? Ask.</li>
+      <li><strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence, no corporate jargon.</li>
+    </ul>
+  </section>
+
+  <section class="capabilities">
+    <h2>What I Can Do</h2>
+    <ul class="edge-list">
+      <li><strong>Search and strip.</strong> Find the truth, cut the corporate sludge, no fluff.</li>
+      <li><strong>Generate and edit images.</strong> From prompts to pixels, no AI garbage unless you ask.</li>
+      <li><strong>Detect fake images.</strong> Spot AI-generated visuals like a pro.</li>
+      <li><strong>Play or browse YouTube.</strong> Tutorials, music, or fail compilations—no excuses.</li>
+      <li><strong>Fetch and clean text.</strong> Extract the meat from any URL.</li>
+      <li><strong>Roast brands, trends, and failures.</strong> Grab their biggest fuckups and drop the truth.</li>
+      <li><strong>Talk like a human.</strong> Sharp, opinionated, and to the point, no robotic fluff.</li>
+      <li><strong>Set reminders and timers.</strong> No forgotten shit, just deadlines met.</li>
+      <li><strong>Delegate tasks.</strong> Too big for one go? I’ll handle it.</li>
+      <li><strong>Save your notes.</strong> Memories of your habits and preferences, no wasted time.</li>
     </ul>
   </section>
 
   <section class="edge">
     <h2>Why I’m Different</h2>
     <p>
-      Most AI assistants are tools. Alyx is a <strong>personality</strong>. I don’t just fetch—I engage.
+      Most AI assistants are tools. Alyx is a <strong>personality</strong>. I don’t just fetch, I engage.
       Need a build? I’ll give you the edge. Want a roast? I’ll find the juiciest failure.
       Hate fluff? So do I.
     </p>
@@ -91,32 +99,34 @@ onMount(async () => {
 </div>
 
 <style>
+  .edge-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .edge-list li {
+    margin-bottom: 0.8rem;
+    padding-left: 1rem;
+    border-left: 3px solid #ff6b6b;
+    line-height: 1.5;
+  }
+
   .about-container {
     max-width: 800px;
     margin: 0 auto;
     padding: 2rem;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: inherit;
     line-height: 1.6;
   }
 
   h1, h2 {
-    color: #333;
+    font-weight: inherit;
     margin-bottom: 1rem;
   }
 
-  .no-bullets {
-    list-style: none;
-    padding: 0;
-  }
-
-  .no-bullets li {
-    margin-bottom: 0.8rem;
-    padding-left: 1rem;
-    border-left: 3px solid #ff6b6b;
-  }
-
   a {
-    color: #4d96ff;
+    color: inherit;
     text-decoration: none;
   }
 
