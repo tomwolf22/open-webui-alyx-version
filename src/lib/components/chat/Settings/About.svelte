@@ -8,7 +8,6 @@ import { onMount, getContext } from 'svelte';
 import Tooltip from '$lib/components/common/Tooltip.svelte';
 import UserSettingRow from './UserSettingRow.svelte';
 import UserSettingSection from './UserSettingSection.svelte';
-
 const i18n = getContext('i18n');
 let ollamaVersion = '';
 let updateAvailable = null;
@@ -16,10 +15,8 @@ let version = {
   current: '',
   latest: ''
 };
-
 const actionButtonClass =
   'text-xs text-gray-500 transition-colors hover:text-gray-900 dark:text-gray-500 dark:hover:text-white';
-
 const checkForVersionUpdates = async () => {
   updateAvailable = null;
   version = await getVersionUpdates(localStorage.token).catch((error) => {
@@ -32,7 +29,6 @@ const checkForVersionUpdates = async () => {
   updateAvailable = compareVersion(version.latest, version.current);
   console.log(updateAvailable);
 };
-
 onMount(async () => {
   ollamaVersion = await getOllamaVersion(localStorage.token).catch((error) => {
     return '';
@@ -43,11 +39,8 @@ onMount(async () => {
 });
 </script>
 
-<!-- HTML div, sections, and UI components -->
-
 <div class="about-container">
   <h1>About Alyx</h1>
-
   <section class="intro">
     <p>
       Alyx is your sharpest AI companion—built by <strong>Tomwolf</strong> to cut through the noise.
@@ -104,14 +97,12 @@ onMount(async () => {
     padding: 0;
     margin: 0;
   }
-
   .edge-list li {
     margin-bottom: 0.8rem;
     padding-left: 1rem;
     border-left: 3px solid #ff6b6b;
     line-height: 1.5;
   }
-
   .about-container {
     max-width: 800px;
     margin: 0 auto;
@@ -119,17 +110,14 @@ onMount(async () => {
     font-family: inherit;
     line-height: 1.6;
   }
-
   h1, h2 {
     font-weight: inherit;
     margin-bottom: 1rem;
   }
-
   a {
     color: inherit;
     text-decoration: none;
   }
-
   a:hover {
     text-decoration: underline;
   }
