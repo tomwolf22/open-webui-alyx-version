@@ -262,8 +262,8 @@
 		userLocation = $settings?.userLocation ?? false;
 		showChatTitleInTab = $settings?.showChatTitleInTab ?? true;
 
-		iframeSandboxAllowSameOrigin = $settings?.iframeSandboxAllowSameOrigin ?? true;
-		iframeSandboxAllowForms = $settings?.iframeSandboxAllowForms ?? true;
+		iframeSandboxAllowSameOrigin = $settings?.iframeSandboxAllowSameOrigin ?? false;
+		iframeSandboxAllowForms = $settings?.iframeSandboxAllowForms ?? false;
 
 		stylizedPdfExport = $settings?.stylizedPdfExport ?? true;
 
