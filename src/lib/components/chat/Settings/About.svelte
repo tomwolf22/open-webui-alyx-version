@@ -94,43 +94,61 @@ onMount(async () => {
     padding: 1rem;
     font-size: 0.6875rem;
     line-height: 1.5;
-    color: var(--color-gray-500); /* Inherit gray-500 */
+    color: #9b9b9b; /* Light mode gray */
     background-color: transparent;
   }
   .dark .about-container {
-    color: var(--color-gray-400); /* Slightly lighter for dark mode */
+    color: #b4b4b4; /* Dark mode gray */
   }
   .about-container h1 {
     font-size: 0.75rem;
     font-weight: 500;
     margin-bottom: 1rem;
-    color: var(--color-text-primary); /* Fallback to default text color */
+    color: #ffffff; /* White for headings */
+  }
+  .dark .about-container h1 {
+    color: #ffffff;
   }
   .about-container h2 {
     font-size: 0.75rem;
     font-weight: 500;
     margin: 1.5rem 0 0.75rem 0;
-    color: var(--color-text-primary);
+    color: #ffffff; /* White for headings */
+  }
+  .dark .about-container h2 {
+    color: #ffffff;
   }
   .about-container p {
     margin-bottom: 1rem;
+    color: #9b9b9b; /* Light mode gray */
+  }
+  .dark .about-container p {
+    color: #b4b4b4; /* Dark mode gray */
   }
   .edge-list li {
     margin-bottom: 0.5rem;
     padding-left: 0.75rem;
     border-left: 3px solid #ef4444;
+    color: #9b9b9b; /* Light mode gray */
   }
   .dark .edge-list li {
+    color: #b4b4b4; /* Dark mode gray */
     border-left-color: #f87171;
   }
   .about-container a {
-    color: var(--color-primary-500);
+    color: #3b82f6;
     text-decoration: none;
     transition: color 0.2s;
   }
   .about-container a:hover {
-    color: var(--color-primary-600);
+    color: #2563eb;
     text-decoration: underline;
+  }
+  .dark .about-container a {
+    color: #60a5fa;
+  }
+  .dark .about-container a:hover {
+    color: #93c5fd;
   }
   .edge-list {
     list-style: none;
@@ -139,6 +157,9 @@ onMount(async () => {
   }
   .about-container strong {
     font-weight: 600;
-    color: var(--color-text-primary);
+    color: #ffffff; /* White for bold text */
+  }
+  .dark .about-container strong {
+    color: #ffffff;
   }
 </style>
