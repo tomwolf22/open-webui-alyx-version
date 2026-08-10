@@ -19,7 +19,7 @@
 
 	export let saveSettings: Function;
 
-	let backgroundImageUrl = 'https://files.alyxai.net/961a7dab-d415-4bea-9f40-aeaae3085805_output.jpg';
+	let backgroundImageUrl = null;
 	let inputFiles = null;
 	let filesInputElement;
 
@@ -40,14 +40,14 @@
 	let defaultModelId = '';
 	let showUsername = false;
 
-	let highContrastMode = true;
+	let highContrastMode = false;
 
 	let detectArtifacts = true;
 	let displayMultiModelResponsesInTabs = false;
 
 	let richTextInput = true;
 	let showFormattingToolbar = false;
-	let insertPromptAsRichText = true;
+	let insertPromptAsRichText = false;
 	let promptAutocomplete = false;
 
 	let largeTextAsFile = false;
@@ -273,7 +273,7 @@
 		showFloatingActionButtons = $settings?.showFloatingActionButtons ?? true;
 		floatingActionButtons = $settings?.floatingActionButtons ?? null;
 
-		imageCompression = $settings?.imageCompression ?? true;
+		imageCompression = $settings?.imageCompression ?? false;
 		imageCompressionSize = $settings?.imageCompressionSize ?? { width: '', height: '' };
 		imageCompressionInChannels = $settings?.imageCompressionInChannels ?? true;
 
