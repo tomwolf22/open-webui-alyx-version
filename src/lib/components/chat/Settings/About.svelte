@@ -59,16 +59,16 @@ onMount(async () => {
   <section class="capabilities">
     <h2>What I Can Do</h2>
     <ul class="edge-list">
-      <li><strong>Search the web.</strong> Find the truth, cut the corporate sludge, no fluff."What's the capital of..."</li>
-      <li><strong>Generate and edit images.</strong> From prompts to pixels, no AI garbage unless you ask."Generate an image of..." "Edit this image to..."</li>
-      <li><strong>Detect fake images.</strong> Spot AI-generated visuals like a pro "Is this image AI?".</li>
-      <li><strong>Play or browse YouTube.</strong> Tutorials, music, or fail compilations, no excuses."Play back in black by ACDC"</li>
+      <li><strong>Search the web.</strong> Find the truth, cut the corporate sludge, no fluff. "What's the capital of..."</li>
+      <li><strong>Generate and edit images.</strong> From prompts to pixels, no AI garbage unless you ask. "Generate an image of..." "Edit this image to..."</li>
+      <li><strong>Detect fake images.</strong> Spot AI-generated visuals like a pro. "Is this image AI?".</li>
+      <li><strong>Play or browse YouTube.</strong> Tutorials, music, or fail compilations, no excuses. "Play back in black by ACDC"</li>
       <li><strong>Fetch and clean text.</strong> Extract the meat from any URL. "Make sense of this webpage"</li>
-      <li><strong>Roast brands, trends, and failures.</strong> Grab their biggest fuckups and drop the truth."Roast Nigel Farage"</li>
-      <li><strong>Talk like a human.</strong> Sharp, opinionated, and to the point, no robotic fluff."Who are you Alyx?"</li>
+      <li><strong>Roast brands, trends, and failures.</strong> Grab their biggest fuckups and drop the truth. "Roast Nigel Farage"</li>
+      <li><strong>Talk like a human.</strong> Sharp, opinionated, and to the point, no robotic fluff. "Who are you Alyx?"</li>
       <li><strong>Set reminders and timers.</strong> "Set a 5 min timer Alyx".</li>
       <li><strong>Delegate tasks to my minions.</strong> Too big for one go? I’ll create more of me to handle it.</li>
-      <li><strong>Save your notes.</strong> Memories of your habits and preferences, "Save this as a note Alyx".</li>
+      <li><strong>Save your notes.</strong> Memories of your habits and preferences. "Save this as a note Alyx"</li>
     </ul>
   </section>
   <section class="edge">
@@ -92,61 +92,45 @@ onMount(async () => {
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-    font-size: 0.6875rem; /* Adjusted text size */
+    font-size: 0.6875rem;
     line-height: 1.5;
-    color: #6b7280;
+    color: var(--color-gray-500); /* Inherit gray-500 */
     background-color: transparent;
   }
   .dark .about-container {
-    color: #9ca3af;
+    color: var(--color-gray-400); /* Slightly lighter for dark mode */
   }
   .about-container h1 {
-    font-size: 0.75rem; /* Adjusted title size */
+    font-size: 0.75rem;
     font-weight: 500;
     margin-bottom: 1rem;
-  }
-  .dark .about-container h1 {
-    color: #ffffff;
+    color: var(--color-text-primary); /* Fallback to default text color */
   }
   .about-container h2 {
-    font-size: 0.75rem; /* Adjusted title size */
+    font-size: 0.75rem;
     font-weight: 500;
     margin: 1.5rem 0 0.75rem 0;
-  }
-  .dark .about-container h2 {
-    color: #ffffff;
+    color: var(--color-text-primary);
   }
   .about-container p {
     margin-bottom: 1rem;
-    color: #6b7280;
-  }
-  .dark .about-container p {
-    color: #9ca3af;
   }
   .edge-list li {
     margin-bottom: 0.5rem;
     padding-left: 0.75rem;
     border-left: 3px solid #ef4444;
-    color: #6b7280;
   }
   .dark .edge-list li {
-    color: #9ca3af;
     border-left-color: #f87171;
   }
   .about-container a {
-    color: #3b82f6;
+    color: var(--color-primary-500);
     text-decoration: none;
     transition: color 0.2s;
   }
   .about-container a:hover {
-    color: #2563eb;
+    color: var(--color-primary-600);
     text-decoration: underline;
-  }
-  .dark .about-container a {
-    color: #60a5fa;
-  }
-  .dark .about-container a:hover {
-    color: #93c5fd;
   }
   .edge-list {
     list-style: none;
@@ -155,8 +139,6 @@ onMount(async () => {
   }
   .about-container strong {
     font-weight: 600;
-  }
-  .dark .about-container strong {
-    color: #ffffff;
+    color: var(--color-text-primary);
   }
 </style>
