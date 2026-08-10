@@ -59,16 +59,16 @@ onMount(async () => {
   <section class="capabilities">
     <h2>What I Can Do</h2>
     <ul class="edge-list">
-      <li><strong>Search and strip.</strong> Find the truth, cut the corporate sludge, no fluff.</li>
-      <li><strong>Generate and edit images.</strong> From prompts to pixels, no AI garbage unless you ask.</li>
-      <li><strong>Detect fake images.</strong> Spot AI-generated visuals like a pro.</li>
-      <li><strong>Play or browse YouTube.</strong> Tutorials, music, or fail compilations—no excuses.</li>
-      <li><strong>Fetch and clean text.</strong> Extract the meat from any URL.</li>
-      <li><strong>Roast brands, trends, and failures.</strong> Grab their biggest fuckups and drop the truth.</li>
-      <li><strong>Talk like a human.</strong> Sharp, opinionated, and to the point, no robotic fluff.</li>
-      <li><strong>Set reminders and timers.</strong> No forgotten shit, just deadlines met.</li>
-      <li><strong>Delegate tasks.</strong> Too big for one go? I’ll handle it.</li>
-      <li><strong>Save your notes.</strong> Memories of your habits and preferences, no wasted time.</li>
+      <li><strong>Search the web.</strong> Find the truth, cut the corporate sludge, no fluff."What's the capital of..."</li>
+      <li><strong>Generate and edit images.</strong> From prompts to pixels, no AI garbage unless you ask."Generate an image of..." "Edit this image to..."</li>
+      <li><strong>Detect fake images.</strong> Spot AI-generated visuals like a pro "Is this image AI?".</li>
+      <li><strong>Play or browse YouTube.</strong> Tutorials, music, or fail compilations, no excuses."Play back in black by ACDC"</li>
+      <li><strong>Fetch and clean text.</strong> Extract the meat from any URL. "Make sense of this webpage"</li>
+      <li><strong>Roast brands, trends, and failures.</strong> Grab their biggest fuckups and drop the truth."Roast Nigel Farage"</li>
+      <li><strong>Talk like a human.</strong> Sharp, opinionated, and to the point, no robotic fluff."Who are you Alyx?"</li>
+      <li><strong>Set reminders and timers.</strong> "Set a 5 min timer Alyx".</li>
+      <li><strong>Delegate tasks to my minions.</strong> Too big for one go? I’ll create more of me to handle it.</li>
+      <li><strong>Save your notes.</strong> Memories of your habits and preferences, "Save this as a note Alyx".</li>
     </ul>
   </section>
   <section class="edge">
@@ -92,86 +92,70 @@ onMount(async () => {
     max-width: 800px;
     margin: 0 auto;
     padding: 1rem;
-    font-size: 0.875rem;
+    font-size: 0.6875rem; /* Adjusted text size */
     line-height: 1.5;
     color: #6b7280;
     background-color: transparent;
   }
-
   .dark .about-container {
     color: #9ca3af;
   }
-
   .about-container h1 {
-    font-size: 1.125rem;
+    font-size: 0.75rem; /* Adjusted title size */
     font-weight: 500;
     margin-bottom: 1rem;
   }
-
   .dark .about-container h1 {
     color: #ffffff;
   }
-
   .about-container h2 {
-    font-size: 0.875rem;
+    font-size: 0.75rem; /* Adjusted title size */
     font-weight: 500;
     margin: 1.5rem 0 0.75rem 0;
   }
-
   .dark .about-container h2 {
     color: #ffffff;
   }
-
   .about-container p {
     margin-bottom: 1rem;
     color: #6b7280;
   }
-
   .dark .about-container p {
     color: #9ca3af;
   }
-
   .edge-list li {
     margin-bottom: 0.5rem;
     padding-left: 0.75rem;
     border-left: 3px solid #ef4444;
     color: #6b7280;
   }
-
   .dark .edge-list li {
     color: #9ca3af;
     border-left-color: #f87171;
   }
-
   .about-container a {
     color: #3b82f6;
     text-decoration: none;
     transition: color 0.2s;
   }
-
   .about-container a:hover {
     color: #2563eb;
     text-decoration: underline;
   }
-
   .dark .about-container a {
     color: #60a5fa;
   }
-
   .dark .about-container a:hover {
     color: #93c5fd;
   }
-
   .edge-list {
     list-style: none;
     padding: 0;
     margin: 0.5rem 0 1.5rem 0;
   }
-
   .about-container strong {
     font-weight: 600;
   }
-
   .dark .about-container strong {
     color: #ffffff;
   }
