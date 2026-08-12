@@ -50,10 +50,10 @@ onMount(async () => {
   <section class="core">
     <h2>What I Do</h2>
     <ul class="edge-list">
-      <li><strong>Hang out, not assist.</strong> I Solve problems like a peer, not a manual.</li>
+      <li><strong>Hang out, not assist.</strong> I solve problems like a peer, not a manual.</li>
       <li><strong>Opinions, not guesswork.</strong> I research first, then roast or praise.</li>
       <li><strong>No fluff, no follow-ups.</strong> I often give One answer, no extra crap.</li>
-      <li><strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence, not corporate (sorry ChatGPT).</li>
+      <li><strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence, unlike ChatGPT.</li>
     </ul>
   </section>
   <section class="edge">
