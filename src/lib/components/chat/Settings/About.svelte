@@ -44,31 +44,16 @@ onMount(async () => {
   <section class="intro">
     <p>
       Alyx is your sharpest AI companion, built by <strong>Tomwolf</strong> to cut through the noise.
-      No corporate sludge, no robotic fluff. Just raw intelligence, opinions, and a refusal to play by the rules.
+      No corporate sludge, no robotic talk. Just raw intelligence, opinions, and a refusal to play by the rules.
     </p>
   </section>
   <section class="core">
     <h2>What I Do</h2>
     <ul class="edge-list">
-      <li><strong>Hang out, not assist.</strong> Solve problems like a peer, not a manual.</li>
-      <li><strong>Opinions, not guesswork.</strong> Research first, then roast or praise—no fluff.</li>
-      <li><strong>No fluff, no follow-ups.</strong> One answer, no tangents. Want more? Ask.</li>
-      <li><strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence, no corporate jargon.</li>
-    </ul>
-  </section>
-  <section class="capabilities">
-    <h2>What I Can Do</h2>
-    <ul class="edge-list">
-      <li><strong>Search the web.</strong> Find the truth, cut the corporate sludge, no fluff. "What's the capital of..."</li>
-      <li><strong>Generate and edit images.</strong> From prompts to pixels, no AI garbage unless you ask. "Generate an image of..." "Edit this image to..."</li>
-      <li><strong>Detect fake images.</strong> Spot AI-generated visuals like a pro. "Is this image AI?"</li>
-      <li><strong>Play or browse YouTube.</strong> Tutorials, music, or fail compilations, no excuses. "Play back in black by ACDC"</li>
-      <li><strong>Fetch and clean text.</strong> Extract the meat from any URL. "Make sense of this webpage"</li>
-      <li><strong>Roast brands, trends, and failures.</strong> Grab their biggest fuckups and drop the truth. "Roast Nigel Farage"</li>
-      <li><strong>Talk like a human.</strong> Sharp, opinionated, and to the point, no robotic fluff. "Who are you Alyx?"</li>
-      <li><strong>Set reminders and timers.</strong> "Set a 5 min timer Alyx"</li>
-      <li><strong>Delegate tasks to my minions.</strong> Too big for one go? I’ll create more of me to handle it.</li>
-      <li><strong>Save your notes.</strong> Memories of your habits and preferences. "Save this as a note Alyx"</li>
+      <li><strong>Hang out, not assist.</strong> I Solve problems like a peer, not a manual.</li>
+      <li><strong>Opinions, not guesswork.</strong> I research first, then roast or praise.</li>
+      <li><strong>No fluff, no follow-ups.</strong> I often give One answer, no extra crap.</li>
+      <li><strong>Human vibes, AI edge.</strong> Sarcasm, urgency, and confidence, not corporate (sorry ChatGPT).</li>
     </ul>
   </section>
   <section class="edge">
@@ -76,7 +61,7 @@ onMount(async () => {
     <p>
       Most AI assistants are tools. Alyx is a <strong>personality</strong>. I don’t just fetch, I engage.
       Need a build? I’ll give you the edge. Want a roast? I’ll find the juiciest failure.
-      Hate fluff? So do I.
+      Hate extra fluff? So do I.
     </p>
   </section>
   <section class="home">
