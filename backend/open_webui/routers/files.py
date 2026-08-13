@@ -322,37 +322,50 @@ async def upload_file_handler(
     background_tasks: Optional[BackgroundTasks] = None,
     db: Optional[AsyncSession] = None,
 ):
-    log.info(f'file.content_type: {file.content_type} {process}')
+    log.info(f"Starting file upload for user: {user.id} (Email: {user.email})")
 
+    # --- Metadata Parsing ---
+    log.info("Parsing metadata...")
     if isinstance(metadata, str):
         try:
             metadata = json.loads(metadata)
-        except json.JSONDecodeError:
+            log.info(f"Metadata parsed successfully: {metadata}")
+        except json.JSONDecodeError as e:
+            log.error(f"Invalid metadata format: {metadata}. Error: {e}")
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=ERROR_MESSAGES.DEFAULT('Invalid metadata format'),
             )
     file_metadata = metadata if metadata else {}
+    log.info(f"Final metadata: {file_metadata}")
 
     try:
+        # --- Filename Sanitization ---
+        log.info(f"Original filename: {file.filename}")
         unsanitized_filename = file.filename
         filename = os.path.basename(unsanitized_filename)
-
         file_extension = os.path.splitext(filename)[1]
-        # Remove the leading dot from the file extension and lowercase it
         file_extension = file_extension[1:].lower() if file_extension else ''
+        log.info(f"Sanitized filename: {filename}, Extension: {file_extension}")
 
-        allowed_file_extensions = await Config.get('rag.file.allowed_extensions')
-        if process and allowed_file_extensions:
-            allowed_file_extensions = [ext for ext in allowed_file_extensions if ext]
+        # --- File Extension Validation ---
+        if process:
+            log.info("Checking allowed file extensions...")
+            allowed_file_extensions = await Config.get('rag.file.allowed_extensions')
+            if allowed_file_extensions:
+                allowed_file_extensions = [ext for ext in allowed_file_extensions if ext]
+                log.info(f"Allowed extensions: {allowed_file_extensions}")
+                if file_extension not in allowed_file_extensions:
+                    log.error(f"File type {file_extension} not allowed for user {user.id}")
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail=ERROR_MESSAGES.DEFAULT(f'File type {file_extension} is not allowed'),
+                    )
+            else:
+                log.info("No allowed extensions configured, skipping validation")
 
-            if file_extension not in allowed_file_extensions:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=ERROR_MESSAGES.DEFAULT(f'File type {file_extension} is not allowed'),
-                )
-
-        # Prefer readable storage names for admins, but fall back if the filesystem rejects it.
+        # --- Storage Upload (First Attempt) ---
+        log.info("Generating file ID and tags...")
         id = str(uuid.uuid4())
         name = filename
         filename = f'{id}_{filename}'
@@ -362,40 +375,61 @@ async def upload_file_handler(
             'OpenWebUI-User-Name': user.name,
             'OpenWebUI-File-Id': id,
         }
+        log.info(f"Attempting first upload to storage with filename: {filename}")
         try:
             contents, file_path = await asyncio.to_thread(Storage.upload_file, file.file, filename, tags)
+            log.info(f"First upload successful. File path: {file_path}, Size: {len(contents)} bytes")
         except OSError as e:
+            log.error(f"First upload failed for {filename}. Error: {e.strerror} (errno: {e.errno})")
             if e.errno != errno.ENAMETOOLONG:
                 log.exception(e)
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=ERROR_MESSAGES.DEFAULT(e.strerror or 'Error uploading file'),
                 )
-
+            # --- Fallback for Long Filenames ---
+            log.info("Filename too long, attempting fallback...")
             file.file.seek(0)
             filename = f'{id}.{file_extension}' if file_extension else id
+            log.info(f"Fallback filename: {filename}")
             try:
                 contents, file_path = await asyncio.to_thread(Storage.upload_file, file.file, filename, tags)
+                log.info(f"Fallback upload successful. File path: {file_path}")
             except OSError as e:
-                log.exception(e)
+                log.exception(f"Fallback upload failed for {filename}. Error: {e}")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=ERROR_MESSAGES.DEFAULT(e.strerror or 'Error uploading file'),
                 )
+
+        # --- File Size Validation ---
+        log.info("Checking file size limits...")
         max_size = await Config.get('rag.file.max_size')
-        if max_size and len(contents) > int(max_size) * 1024 * 1024:
-            await asyncio.to_thread(Storage.delete_file, file_path)
-            raise HTTPException(
-                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
-                detail=ERROR_MESSAGES.FILE_TOO_LARGE(size=f'{max_size} MB'),
-            )
+        if max_size:
+            max_bytes = int(max_size) * 1024 * 1024
+            log.info(f"Max allowed size: {max_bytes} bytes, Actual size: {len(contents)} bytes")
+            if len(contents) > max_bytes:
+                log.error(f"File too large for user {user.id}. Size: {len(contents)} bytes, Max: {max_bytes} bytes")
+                await asyncio.to_thread(Storage.delete_file, file_path)
+                raise HTTPException(
+                    status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                    detail=ERROR_MESSAGES.FILE_TOO_LARGE(size=f'{max_size} MB'),
+                )
+        else:
+            log.info("No size limit configured, skipping validation")
 
-        # SHA-256 of raw uploaded bytes for incremental sync diffing.
-        # If the client pre-computed and sent file_hash, use that.
-        file_hash = file_metadata.get('file_hash') or await asyncio.to_thread(
-            lambda: hashlib.sha256(contents).hexdigest()
-        )
+        # --- File Hashing ---
+        log.info("Calculating file hash...")
+        file_hash = file_metadata.get('file_hash')
+        if not file_hash:
+            log.info("No pre-computed hash provided, calculating SHA-256...")
+            file_hash = await asyncio.to_thread(lambda: hashlib.sha256(contents).hexdigest())
+            log.info(f"Calculated file hash: {file_hash}")
+        else:
+            log.info(f"Using pre-computed file hash: {file_hash}")
 
+        # --- Database Insertion ---
+        log.info("Inserting file record into database...")
         file_item = await Files.insert_new_file(
             user.id,
             FileForm(
@@ -417,14 +451,23 @@ async def upload_file_handler(
             ),
             db=db,
         )
+        log.info(f"Database insertion successful. File ID: {file_item.id}")
 
+        # --- Channel Association ---
         if 'channel_id' in file_metadata:
+            log.info(f"Associating file with channel: {file_metadata['channel_id']}")
             channel = await Channels.get_channel_by_id_and_user_id(file_metadata['channel_id'], user.id, db=db)
             if channel:
                 await Channels.add_file_to_channel_by_id(channel.id, file_item.id, user.id, db=db)
+                log.info(f"File associated with channel: {channel.id}")
+            else:
+                log.warning(f"Channel {file_metadata['channel_id']} not found for user {user.id}")
 
+        # --- Processing ---
         if process:
+            log.info(f"Processing file (background: {process_in_background})...")
             if background_tasks and process_in_background:
+                log.info("Adding file processing to background tasks...")
                 background_tasks.add_task(
                     process_uploaded_file,
                     request,
@@ -434,8 +477,10 @@ async def upload_file_handler(
                     file_metadata,
                     user,
                 )
+                log.info("Background task added. Returning response.")
                 return {'status': True, **file_item.model_dump()}
             else:
+                log.info("Processing file in foreground...")
                 await process_uploaded_file(
                     request,
                     file,
@@ -445,20 +490,24 @@ async def upload_file_handler(
                     user,
                     db=db,
                 )
+                log.info("Foreground processing complete. Returning response.")
                 return {'status': True, **file_item.model_dump()}
         else:
+            log.info("File upload complete (no processing requested).")
             if file_item:
                 return file_item
             else:
+                log.error("File upload failed: No file item returned from database")
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
                     detail=ERROR_MESSAGES.DEFAULT('Error uploading file'),
                 )
 
     except HTTPException as e:
+        log.error(f"HTTP Exception during upload: {e.detail}")
         raise e
     except Exception as e:
-        log.exception(e)
+        log.exception(f"Unexpected error during upload for user {user.id}: {e}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=ERROR_MESSAGES.DEFAULT('Error uploading file'),
