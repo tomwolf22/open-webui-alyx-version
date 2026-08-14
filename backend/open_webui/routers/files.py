@@ -322,9 +322,26 @@ async def upload_file_handler(
     background_tasks: Optional[BackgroundTasks] = None,
     db: Optional[AsyncSession] = None,
 ):
+    # --- Timing Setup ---
+    stage_timings = {}
+    overall_start = time.time()
     log.info(f"Starting file upload for user: {user.id} (Email: {user.email})")
 
+    # --- Pre-Warm S3 Connection (Avoid Cold Start) ---
+    try:
+        log.info("Pre-warming S3 connection...")
+        warm_start = time.time()
+        await asyncio.to_thread(
+            lambda: Storage.s3.head_object(Bucket=Storage.bucket, Key="__warmup__")
+        )
+        stage_timings["s3_warmup"] = time.time() - warm_start
+        log.info(f"S3 pre-warm completed in {stage_timings['s3_warmup']:.2f}s")
+    except Exception as e:
+        log.warning(f"S3 pre-warm failed (expected on first run): {e}")
+        stage_timings["s3_warmup"] = time.time() - warm_start
+
     # --- Metadata Parsing ---
+    metadata_start = time.time()
     log.info("Parsing metadata...")
     if isinstance(metadata, str):
         try:
@@ -337,16 +354,19 @@ async def upload_file_handler(
                 detail=ERROR_MESSAGES.DEFAULT('Invalid metadata format'),
             )
     file_metadata = metadata if metadata else {}
-    log.info(f"Final metadata: {file_metadata}")
+    stage_timings["metadata_parsing"] = time.time() - metadata_start
+    log.info(f"Metadata stage completed in {stage_timings['metadata_parsing']:.2f}s")
 
     try:
         # --- Filename Sanitization ---
+        filename_start = time.time()
         log.info(f"Original filename: {file.filename}")
         unsanitized_filename = file.filename
         filename = os.path.basename(unsanitized_filename)
         file_extension = os.path.splitext(filename)[1]
         file_extension = file_extension[1:].lower() if file_extension else ''
         log.info(f"Sanitized filename: {filename}, Extension: {file_extension}")
+        stage_timings["filename_sanitization"] = time.time() - filename_start
 
         # --- File Extension Validation ---
         if process:
@@ -363,8 +383,10 @@ async def upload_file_handler(
                     )
             else:
                 log.info("No allowed extensions configured, skipping validation")
+        stage_timings["extension_validation"] = time.time() - filename_start
 
-        # --- Storage Upload (First Attempt) ---
+        # --- Storage Upload ---
+        upload_start = time.time()
         log.info("Generating file ID and tags...")
         id = str(uuid.uuid4())
         name = filename
@@ -375,12 +397,13 @@ async def upload_file_handler(
             'OpenWebUI-User-Name': user.name,
             'OpenWebUI-File-Id': id,
         }
-        log.info(f"Attempting first upload to storage with filename: {filename}")
+        log.info(f"Attempting upload to storage with filename: {filename}")
         try:
             contents, file_path = await asyncio.to_thread(Storage.upload_file, file.file, filename, tags)
-            log.info(f"First upload successful. File path: {file_path}, Size: {len(contents)} bytes")
+            stage_timings["storage_upload"] = time.time() - upload_start
+            log.info(f"Upload successful. Path: {file_path}, Size: {len(contents)} bytes | Time: {stage_timings['storage_upload']:.2f}s")
         except OSError as e:
-            log.error(f"First upload failed for {filename}. Error: {e.strerror} (errno: {e.errno})")
+            log.error(f"Upload failed for {filename}. Error: {e.strerror} (errno: {e.errno})")
             if e.errno != errno.ENAMETOOLONG:
                 log.exception(e)
                 raise HTTPException(
@@ -394,7 +417,8 @@ async def upload_file_handler(
             log.info(f"Fallback filename: {filename}")
             try:
                 contents, file_path = await asyncio.to_thread(Storage.upload_file, file.file, filename, tags)
-                log.info(f"Fallback upload successful. File path: {file_path}")
+                stage_timings["storage_upload"] = time.time() - upload_start
+                log.info(f"Fallback upload successful. Path: {file_path} | Time: {stage_timings['storage_upload']:.2f}s")
             except OSError as e:
                 log.exception(f"Fallback upload failed for {filename}. Error: {e}")
                 raise HTTPException(
@@ -403,6 +427,7 @@ async def upload_file_handler(
                 )
 
         # --- File Size Validation ---
+        size_start = time.time()
         log.info("Checking file size limits...")
         max_size = await Config.get('rag.file.max_size')
         if max_size:
@@ -415,10 +440,10 @@ async def upload_file_handler(
                     status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
                     detail=ERROR_MESSAGES.FILE_TOO_LARGE(size=f'{max_size} MB'),
                 )
-        else:
-            log.info("No size limit configured, skipping validation")
+        stage_timings["size_validation"] = time.time() - size_start
 
         # --- File Hashing ---
+        hash_start = time.time()
         log.info("Calculating file hash...")
         file_hash = file_metadata.get('file_hash')
         if not file_hash:
@@ -427,8 +452,10 @@ async def upload_file_handler(
             log.info(f"Calculated file hash: {file_hash}")
         else:
             log.info(f"Using pre-computed file hash: {file_hash}")
+        stage_timings["hashing"] = time.time() - hash_start
 
         # --- Database Insertion ---
+        db_start = time.time()
         log.info("Inserting file record into database...")
         file_item = await Files.insert_new_file(
             user.id,
@@ -451,10 +478,12 @@ async def upload_file_handler(
             ),
             db=db,
         )
-        log.info(f"Database insertion successful. File ID: {file_item.id}")
+        stage_timings["database_insertion"] = time.time() - db_start
+        log.info(f"Database insertion successful. File ID: {file_item.id} | Time: {stage_timings['database_insertion']:.2f}s")
 
         # --- Channel Association ---
         if 'channel_id' in file_metadata:
+            channel_start = time.time()
             log.info(f"Associating file with channel: {file_metadata['channel_id']}")
             channel = await Channels.get_channel_by_id_and_user_id(file_metadata['channel_id'], user.id, db=db)
             if channel:
@@ -462,9 +491,11 @@ async def upload_file_handler(
                 log.info(f"File associated with channel: {channel.id}")
             else:
                 log.warning(f"Channel {file_metadata['channel_id']} not found for user {user.id}")
+            stage_timings["channel_association"] = time.time() - channel_start
 
         # --- Processing ---
         if process:
+            process_start = time.time()
             log.info(f"Processing file (background: {process_in_background})...")
             if background_tasks and process_in_background:
                 log.info("Adding file processing to background tasks...")
@@ -477,7 +508,8 @@ async def upload_file_handler(
                     file_metadata,
                     user,
                 )
-                log.info("Background task added. Returning response.")
+                stage_timings["processing"] = time.time() - process_start
+                log.info(f"Background task added | Time: {stage_timings['processing']:.2f}s")
                 return {'status': True, **file_item.model_dump()}
             else:
                 log.info("Processing file in foreground...")
@@ -490,10 +522,13 @@ async def upload_file_handler(
                     user,
                     db=db,
                 )
-                log.info("Foreground processing complete. Returning response.")
+                stage_timings["processing"] = time.time() - process_start
+                log.info(f"Foreground processing complete | Time: {stage_timings['processing']:.2f}s")
                 return {'status': True, **file_item.model_dump()}
         else:
             log.info("File upload complete (no processing requested).")
+            stage_timings["total_time"] = time.time() - overall_start
+            log.info(f"=== Upload Summary ===\n{json.dumps(stage_timings, indent=2)}\nTotal Time: {stage_timings['total_time']:.2f}s")
             if file_item:
                 return file_item
             else:
@@ -504,10 +539,12 @@ async def upload_file_handler(
                 )
 
     except HTTPException as e:
-        log.error(f"HTTP Exception during upload: {e.detail}")
+        stage_timings["total_time"] = time.time() - overall_start
+        log.error(f"HTTP Exception during upload: {e.detail}\n{json.dumps(stage_timings, indent=2)}")
         raise e
     except Exception as e:
-        log.exception(f"Unexpected error during upload for user {user.id}: {e}")
+        stage_timings["total_time"] = time.time() - overall_start
+        log.exception(f"Unexpected error during upload for user {user.id}: {e}\n{json.dumps(stage_timings, indent=2)}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=ERROR_MESSAGES.DEFAULT('Error uploading file'),
