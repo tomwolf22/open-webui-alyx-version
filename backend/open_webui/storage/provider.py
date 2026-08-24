@@ -99,20 +99,33 @@ class LocalStorageProvider(StorageProvider):
 
 
 class S3StorageProvider(StorageProvider):
-    def __init__(self):
+    # Class-level variables to cache the S3 client and config
+    _s3_client = None
+    _bucket_name = S3_BUCKET_NAME
+    _key_prefix = S3_KEY_PREFIX if S3_KEY_PREFIX else ''
+
+    @classmethod
+    def _initialize_client(cls):
+        """Initialize the S3 client (called once at module load)."""
+        if cls._s3_client is not None:
+            return  # Already initialized
+
         config = Config(
             s3={
                 'use_accelerate_endpoint': S3_USE_ACCELERATE_ENDPOINT,
                 'addressing_style': S3_ADDRESSING_STYLE,
             },
-            # KIT change - see https://github.com/boto/boto3/issues/4400#issuecomment-2600742103∆
             request_checksum_calculation='when_required',
             response_checksum_validation='when_required',
+            # Enable TCP keepalive and connection pooling
+            connect_timeout=5,
+            read_timeout=10,
+            retries={'max_attempts': 2},
+            tcp_keepalive=True,
         )
 
-        # If access key and secret are provided, use them for authentication
         if S3_ACCESS_KEY_ID and S3_SECRET_ACCESS_KEY:
-            self.s3_client = boto3.client(
+            cls._s3_client = boto3.client(
                 's3',
                 region_name=S3_REGION_NAME,
                 endpoint_url=S3_ENDPOINT_URL,
@@ -121,17 +134,20 @@ class S3StorageProvider(StorageProvider):
                 config=config,
             )
         else:
-            # If no explicit credentials are provided, fall back to default AWS credentials
-            # This supports workload identity (IAM roles for EC2, EKS, etc.)
-            self.s3_client = boto3.client(
+            cls._s3_client = boto3.client(
                 's3',
                 region_name=S3_REGION_NAME,
                 endpoint_url=S3_ENDPOINT_URL,
                 config=config,
             )
 
-        self.bucket_name = S3_BUCKET_NAME
-        self.key_prefix = S3_KEY_PREFIX if S3_KEY_PREFIX else ''
+    def __init__(self):
+        # Ensure the client is initialized (idempotent)
+        self.__class__._initialize_client()
+        # Assign class-level variables to instance
+        self.s3_client = self.__class__._s3_client
+        self.bucket_name = self.__class__._bucket_name
+        self.key_prefix = self.__class__._key_prefix
 
     @staticmethod
     def sanitize_tag_value(s: str) -> str:
@@ -197,7 +213,6 @@ class S3StorageProvider(StorageProvider):
         # Always delete from local storage
         LocalStorageProvider.delete_all_files()
 
-    # The s3 key is the name assigned to an object. It excludes the bucket name, but includes the internal path and the file name.
     def _extract_s3_key(self, full_file_path: str) -> str:
         return '/'.join(full_file_path.split('//')[1].split('/')[1:])
 
@@ -346,3 +361,7 @@ def get_storage_provider(storage_provider: str):
 
 
 Storage = get_storage_provider(STORAGE_PROVIDER)
+
+# Force S3 client initialization at module load time
+if STORAGE_PROVIDER == "s3":
+    S3StorageProvider._initialize_client()
