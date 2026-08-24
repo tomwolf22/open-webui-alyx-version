@@ -117,7 +117,7 @@ class S3StorageProvider(StorageProvider):
             },
             request_checksum_calculation='when_required',
             response_checksum_validation='when_required',
-            # Enable TCP keepalive and connection pooling
+            # Enable TCP keepalive and connection pooling.
             connect_timeout=5,
             read_timeout=10,
             retries={'max_attempts': 2},
