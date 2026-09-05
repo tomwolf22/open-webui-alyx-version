@@ -25,7 +25,7 @@ services:
       - 'WEBUI_SECRET_KEY='
     extra_hosts:
       - host.docker.internal:host-gateway
-    command: sh -c "apt-get install -y stockfish && exec /app/open-webui"
+    command: sh -c "apt-get install -y stockfish"
     restart: unless-stopped
 
 volumes:
