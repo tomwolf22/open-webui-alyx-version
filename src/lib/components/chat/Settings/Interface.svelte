@@ -23,7 +23,7 @@
 	let inputFiles = null;
 	let filesInputElement;
 
-	// Addons
+	// Addons 
 	let titleAutoGenerate = true;
 	let autoFollowUps = false;
 	let autoTags = true;
