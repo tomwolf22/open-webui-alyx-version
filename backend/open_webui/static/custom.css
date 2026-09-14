@@ -1,14 +1,1 @@
-/* Target all iframes */
-iframe {
-  height: 100vh; /* Fallback: Viewport height */
-  height: max(100vh, 100%); /* Modern: Use whichever is taller */
-  width: 100%;
-  border: none;
-  display: block; /* Removes extra space below iframe */
-}
 
-/* Optional: If the iframe is inside a scrollable container */
-.scrollable-container {
-  overflow: hidden; /* Disable scrolling */
-  height: auto; /* Let the iframe dictate height */
-}
